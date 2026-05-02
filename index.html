@@ -8,157 +8,105 @@
     <!-- Librerías y Fuentes -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    
-    <!-- Librería de Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <style>
         :root { --cyan: #00f3ff; --purple: #bc13fe; --deep-blue: #0f172a; }
         body, html { margin: 0; padding: 0; height: 100%; font-family: 'Inter', sans-serif; background-color: #050510; overflow: hidden; color: white; }
         
-        /* Fondos y Efectos */
         .cosmic-bg { position: fixed; top: -5%; left: -5%; width: 110%; height: 110%; background-image: url('https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=2988&auto=format&fit=crop'); background-size: cover; background-position: center; filter: blur(25px) brightness(0.5) saturate(1.2); z-index: 0; animation: slowPan 60s infinite alternate linear; }
         @keyframes slowPan { 0% { transform: scale(1) translate(0, 0); } 100% { transform: scale(1.1) translate(-2%, -2%); } }
         .ambient-glow { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.5; z-index: 1; pointer-events: none; }
         .glow-cyan { top: 20%; left: 30%; width: 40vw; height: 40vw; background: radial-gradient(circle, rgba(0,243,255,0.3) 0%, transparent 70%); }
         .glow-purple { bottom: 10%; right: 20%; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(188,19,254,0.2) 0%, transparent 70%); }
         
-        /* Contenedores Principales */
         .glass-window { position: relative; z-index: 10; width: 95vw; max-width: 1600px; height: 90vh; margin: 5vh auto; background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 40px rgba(0, 243, 255, 0.05) inset; display: flex; flex-direction: column; overflow: hidden; }
         
-        /* Tipografía y Navegación */
         .font-orbitron { font-family: 'Orbitron', sans-serif; }
         .text-gradient { background: linear-gradient(90deg, var(--cyan), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .nav-item { transition: all 0.2s ease; border-left: 3px solid transparent; }
         .nav-item:hover { background: rgba(255, 255, 255, 0.05); border-left-color: var(--cyan); color: var(--cyan); }
         .nav-item.active { background: rgba(0, 243, 255, 0.1); border-left-color: var(--cyan); color: var(--cyan); }
         
-        /* Botones e Inputs */
         .btn-glow { transition: all 0.3s ease; box-shadow: 0 0 15px rgba(188, 19, 254, 0.3); }
         .btn-glow:hover { box-shadow: 0 0 25px rgba(188, 19, 254, 0.6); transform: translateY(-1px); }
         input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
         input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; background: rgba(255, 255, 255, 0.1); border-radius: 2px; }
         input[type=range]::-webkit-slider-thumb { height: 12px; width: 12px; border-radius: 50%; background: var(--cyan); -webkit-appearance: none; margin-top: -4px; box-shadow: 0 0 10px var(--cyan); cursor: pointer; }
         
-        /* Animación del Disco */
         .glowing-disk { width: 120px; height: 120px; border-radius: 50%; background: radial-gradient(circle, #0f172a 0%, #050510 100%); border: 2px solid rgba(0, 243, 255, 0.3); box-shadow: 0 0 20px rgba(188, 19, 254, 0.4); display: flex; justify-content: center; align-items: center; animation: spin 10s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
-    <!-- Fondos -->
     <div class="cosmic-bg"></div>
     <div class="ambient-glow glow-cyan"></div>
     <div class="ambient-glow glow-purple"></div>
 
     <div class="glass-window flex flex-col relative">
-        
-        <!-- Barra Superior -->
         <header class="h-16 border-b border-white/10 flex items-center justify-between px-6 bg-black/20">
             <div class="w-1/4 flex items-center gap-2">
                 <div class="w-3 h-3 rounded-full bg-red-500"></div>
                 <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
                 <div class="w-3 h-3 rounded-full bg-green-500"></div>
             </div>
-            
             <div class="w-2/4 flex justify-center">
                 <div class="relative w-full max-w-lg">
-                    <input type="text" placeholder="Buscar canciones, artistas o playlists..." class="w-full bg-white/5 border border-white/10 rounded-full py-1.5 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
-                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <input type="text" placeholder="Buscar canciones..." class="w-full bg-white/5 border border-white/10 rounded-full py-1.5 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-cyan-400">
                 </div>
             </div>
-
             <div class="w-1/4 flex justify-end items-center gap-4">
                 <button class="text-sm font-medium text-white/70 hover:text-white transition-colors">Iniciar Sesión</button>
                 <button class="bg-gradient-to-r from-purple-600 to-cyan-500 text-white text-sm font-semibold px-4 py-1.5 rounded-full btn-glow">Registrarse</button>
             </div>
         </header>
 
-        <!-- Cuerpo Principal -->
         <main class="flex flex-1 overflow-hidden">
-            
-            <!-- Barra Lateral -->
             <aside class="w-64 border-r border-white/10 bg-black/20 flex flex-col py-6">
                 <div class="px-6 mb-8">
                     <h1 class="text-xl font-orbitron font-bold tracking-wider text-gradient">QUANTUM</h1>
                 </div>
-
                 <nav class="flex-1 space-y-1">
-                    <a href="#" class="nav-item active flex items-center gap-3 px-6 py-2.5 text-sm font-medium">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                        Inicio
-                    </a>
-                    <a href="#" class="nav-item flex items-center gap-3 px-6 py-2.5 text-sm font-medium text-white/70">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
-                        Explorar
-                    </a>
-                    <a href="#" class="nav-item flex items-center gap-3 px-6 py-2.5 text-sm font-medium text-white/70">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-                        Tu Biblioteca
-                    </a>
+                    <a href="#" class="nav-item active flex items-center gap-3 px-6 py-2.5 text-sm font-medium">Inicio</a>
+                    <a href="#" class="nav-item flex items-center gap-3 px-6 py-2.5 text-sm font-medium text-white/70">Explorar</a>
                 </nav>
-
-                <div class="px-6 mt-auto">
-                    <div class="border-t border-white/10 pt-4 mb-4">
-                        <p class="text-xs text-white/40 font-orbitron mb-3 uppercase tracking-wider">Tus Playlists</p>
-                        <button class="w-full flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 border-dashed rounded-lg py-2 text-sm text-cyan-400 transition-colors">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                            Crear Playlist
-                        </button>
-                    </div>
-                </div>
             </aside>
 
-            <!-- Área Central Principal -->
             <section class="flex-1 flex flex-col relative p-8 overflow-y-auto">
-                <h2 class="text-3xl font-bold mb-6 text-white">Hola, <span class="text-cyan-400">Guest</span></h2>
+                <h2 class="text-3xl font-bold mb-6 text-white">Descubrir</h2>
                 
-                <!-- CONTENEDOR DINÁMICO PARA LAS CANCIONES -->
+                <!-- Contenedor dinámico -->
                 <div id="contenedor-canciones" class="grid grid-cols-3 gap-6 mb-8">
-                    <!-- Las canciones de Supabase se dibujarán aquí -->
+                    <!-- Las canciones se cargarán aquí -->
                 </div>
 
                 <!-- Reproductor Fijo Inferior -->
                 <div class="absolute bottom-6 left-8 right-8 bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-4 flex items-center gap-6 shadow-2xl">
-                    
-                    <!-- Información de la pista -->
                     <div class="flex items-center gap-4 w-1/4">
                         <div id="glowing-disk" class="glowing-disk w-12 h-12 border-none shadow-[0_0_10px_rgba(0,243,255,0.3)]" style="animation-play-state: paused;"></div>
                         <div>
-                            <h4 class="font-bold text-sm text-white">Night Visions</h4>
-                            <p class="text-xs text-white/50">Synthwave Dreams</p>
+                            <!-- IDs añadidos aquí para poder modificarlos con JS -->
+                            <h4 id="reproductor-titulo" class="font-bold text-sm text-white">Selecciona una pista</h4>
+                            <p id="reproductor-artista" class="text-xs text-white/50">...</p>
                         </div>
                     </div>
 
-                    <!-- Controles Centrales -->
                     <div class="flex-1 flex flex-col items-center">
                         <div class="flex items-center gap-6 mb-2">
-                            <!-- Anterior -->
                             <button class="text-white/50 hover:text-white"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z"></path></svg></button>
                             
-                            <!-- Play / Pause -->
                             <button id="play-btn" class="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center hover:scale-105 transition">
-                                <!-- Icono Play -->
                                 <svg id="play-icon" class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
-                                <!-- Icono Pause (Oculto por defecto) -->
                                 <svg id="pause-icon" class="w-4 h-4 hidden" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
                             </button>
                             
-                            <!-- Siguiente -->
                             <button class="text-white/50 hover:text-white"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M11.555 14.832A1 1 0 0013 14v-2.798l5.445 3.63A1 1 0 0020 14V6a1 1 0 00-1.555-.832L13 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4zM3 6a1 1 0 10-2 0v8a1 1 0 102 0V6z"></path></svg></button>
                         </div>
-                        
-                        <!-- Barra de Progreso -->
-                        <div class="w-full max-w-md flex items-center gap-3">
-                            <span class="text-[10px] text-white/50">00:00</span>
-                            <input type="range" min="0" max="100" value="0">
-                            <span class="text-[10px] text-white/50">04:12</span>
-                        </div>
                     </div>
-
-                    <!-- Volumen -->
+                    
+                    <!-- Control de volumen conectado al audio -->
                     <div class="w-1/4 flex justify-end">
-                        <input type="range" min="0" max="100" value="80" class="w-24">
+                        <input type="range" id="volumen-control" min="0" max="100" value="80" class="w-24">
                     </div>
                 </div>
             </section>
@@ -170,44 +118,52 @@
         // --- 1. CONFIGURACIÓN DE SUPABASE ---
         const supabaseUrl = 'https://hlgdnejdtigydmegiptq.supabase.co'; 
         
-        // ¡CUIDADO! PEGA TU CLAVE COMPLETA JUSTO AQUÍ, ENTRE LAS COMILLAS SIMPLES:
+        // ¡PEGA TU CLAVE COMPLETA AQUÍ!
         const supabaseKey = 'sb_publishable_ESAvdUVWTEHUEnSHxSQUaQ_zGT4ZxQx'; 
         
         const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-        // --- 2. LÓGICA DE BASE DE DATOS Y RENDERIZADO ---
+        // --- VARIABLES DEL REPRODUCTOR DE AUDIO ---
+        let reproductorAudio = new Audio(); // El motor de sonido invisible
+        let urlCancionActual = '';
+        let isPlaying = false; 
+
+        // Referencias a los elementos visuales
+        const playBtn = document.getElementById('play-btn');
+        const playIcon = document.getElementById('play-icon');
+        const pauseIcon = document.getElementById('pause-icon');
+        const glowingDisk = document.getElementById('glowing-disk');
+        const tituloReproductor = document.getElementById('reproductor-titulo');
+        const artistaReproductor = document.getElementById('reproductor-artista');
+        const controlVolumen = document.getElementById('volumen-control');
+
+        // Configurar volumen inicial (80% = 0.8)
+        reproductorAudio.volume = 0.8;
+
+        // --- 2. CARGAR CANCIONES DESDE LA BASE DE DATOS ---
         async function cargarCanciones() {
             try {
-                console.log("Conectando a la dimensión Quantum...");
-                
                 const { data: canciones, error } = await supabaseClient
                     .from('canciones') 
                     .select('*');
 
-                if (error) {
-                    throw error;
-                }
-
-                console.log('¡Conexión exitosa! 🎵 Aquí están tus canciones:', canciones);
-                
-                // Llamamos a la función para dibujar las canciones en la pantalla
+                if (error) throw error;
                 renderizarCanciones(canciones);
-
             } catch (error) {
-                console.error('Error del sistema:', error.message);
+                console.error('Error cargando canciones:', error.message);
             }
         }
 
-        // --- 3. FUNCIÓN: Dibuja las tarjetas en el HTML ---
+        // --- 3. DIBUJAR TARJETAS Y AÑADIR EVENTOS DE CLIC ---
         function renderizarCanciones(canciones) {
             const contenedor = document.getElementById('contenedor-canciones');
-            contenedor.innerHTML = ''; // Limpiamos el contenedor por si acaso
+            contenedor.innerHTML = ''; 
 
-            // Recorremos el Array que nos mandó Supabase
             canciones.forEach(cancion => {
-                // Creamos el HTML para cada tarjeta insertando los datos (titulo, artista)
+                // Al hacer clic, enviamos los datos de esta canción a la función reproducir
                 const tarjetaHTML = `
-                    <div class="bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 transition cursor-pointer group">
+                    <div onclick="seleccionarCancion('${cancion.titulo}', '${cancion.artista}', '${cancion.ruta_audio || ''}')" 
+                         class="bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 transition cursor-pointer group">
                         <div class="w-full h-32 bg-purple-900/50 rounded-lg mb-3 flex items-center justify-center relative overflow-hidden">
                             <div class="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-cyan-500/20"></div>
                             <svg class="w-10 h-10 text-white/50 group-hover:text-white group-hover:scale-110 transition z-10" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"></path></svg>
@@ -216,24 +172,50 @@
                         <p class="text-xs text-white/50 mt-1 truncate">${cancion.artista}</p>
                     </div>
                 `;
-                // Lo inyectamos en el HTML
                 contenedor.innerHTML += tarjetaHTML;
             });
         }
-        
-        // Ejecutar al cargar la página
-        cargarCanciones();
 
-        // --- 4. LÓGICA DE INTERFAZ (BOTÓN PLAY/PAUSE) ---
-        const playBtn = document.getElementById('play-btn');
-        const playIcon = document.getElementById('play-icon');
-        const pauseIcon = document.getElementById('pause-icon');
-        const glowingDisk = document.getElementById('glowing-disk');
-        let isPlaying = false; 
+        // --- 4. FUNCIÓN PARA CAMBIAR Y REPRODUCIR LA CANCIÓN ---
+        window.seleccionarCancion = function(titulo, artista, url) {
+            if (!url) {
+                alert("Esta canción aún no tiene un archivo de audio en la base de datos.");
+                return;
+            }
 
-        playBtn.addEventListener('click', () => {
-            isPlaying = !isPlaying; 
+            // Cambiar textos en el reproductor de abajo
+            tituloReproductor.innerText = titulo;
+            artistaReproductor.innerText = artista;
+
+            // Si haces clic en la canción que ya está sonando, se pausa/reanuda
+            if (urlCancionActual === url) {
+                alternarPlayPause();
+                return;
+            }
+
+            // Si es una canción nueva, cargamos la URL y la reproducimos
+            urlCancionActual = url;
+            reproductorAudio.src = url;
+            reproductorAudio.play();
             
+            isPlaying = true;
+            actualizarIconos();
+        };
+
+        // --- 5. CONTROLES GENERALES (PLAY/PAUSE Y VOLUMEN) ---
+        function alternarPlayPause() {
+            if (!urlCancionActual) return; // No hace nada si no hay canción seleccionada
+
+            isPlaying = !isPlaying;
+            if (isPlaying) {
+                reproductorAudio.play();
+            } else {
+                reproductorAudio.pause();
+            }
+            actualizarIconos();
+        }
+
+        function actualizarIconos() {
             if (isPlaying) {
                 playIcon.classList.add('hidden');
                 pauseIcon.classList.remove('hidden');
@@ -243,7 +225,19 @@
                 pauseIcon.classList.add('hidden');
                 glowingDisk.style.animationPlayState = 'paused';
             }
+        }
+
+        // Conectar el botón de play de la interfaz
+        playBtn.addEventListener('click', alternarPlayPause);
+
+        // Conectar la barra de volumen
+        controlVolumen.addEventListener('input', (evento) => {
+            // El input va de 0 a 100, el audio de HTML5 va de 0.0 a 1.0
+            reproductorAudio.volume = evento.target.value / 100;
         });
+
+        // Ejecutar al inicio
+        cargarCanciones();
     </script>
 </body>
 </html>
