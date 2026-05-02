@@ -188,8 +188,8 @@
                 console.log("Conectando a la dimensión Quantum...");
                 
                 const { data: canciones, error } = await supabaseClient
-                    .from('Canciones') 
-                    .select('*');
+    .from('canciones') 
+    .select('*');
 
                 if (error) {
                     throw error;
