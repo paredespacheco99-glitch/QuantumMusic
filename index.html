@@ -113,16 +113,9 @@
             <section class="flex-1 flex flex-col relative p-8 overflow-y-auto">
                 <h2 class="text-3xl font-bold mb-6 text-white">Hola, <span class="text-cyan-400">Guest</span></h2>
                 
-                <div class="grid grid-cols-3 gap-6 mb-8">
-                    <!-- Tarjeta de Contenido -->
-                    <div class="bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 transition cursor-pointer group">
-                        <div class="w-full h-32 bg-purple-900/50 rounded-lg mb-3 flex items-center justify-center relative overflow-hidden">
-                            <div class="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-cyan-500/20"></div>
-                            <svg class="w-10 h-10 text-white/50 group-hover:text-white group-hover:scale-110 transition z-10" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"></path></svg>
-                        </div>
-                        <h3 class="font-semibold text-white">Synthwave Mix 2026</h3>
-                        <p class="text-xs text-white/50 mt-1">Recientemente escuchado</p>
-                    </div>
+                <!-- CONTENEDOR DINÁMICO PARA LAS CANCIONES -->
+                <div id="contenedor-canciones" class="grid grid-cols-3 gap-6 mb-8">
+                    <!-- Las canciones de Supabase se dibujarán aquí -->
                 </div>
 
                 <!-- Reproductor Fijo Inferior -->
@@ -182,30 +175,56 @@
         
         const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-        // --- 2. PRUEBA DE CONEXIÓN A BASE DE DATOS ---
+        // --- 2. LÓGICA DE BASE DE DATOS Y RENDERIZADO ---
         async function cargarCanciones() {
             try {
                 console.log("Conectando a la dimensión Quantum...");
                 
                 const { data: canciones, error } = await supabaseClient
-    .from('canciones') 
-    .select('*');
+                    .from('canciones') 
+                    .select('*');
 
                 if (error) {
                     throw error;
                 }
 
                 console.log('¡Conexión exitosa! 🎵 Aquí están tus canciones:', canciones);
+                
+                // Llamamos a la función para dibujar las canciones en la pantalla
+                renderizarCanciones(canciones);
 
             } catch (error) {
                 console.error('Error del sistema:', error.message);
             }
         }
+
+        // --- 3. FUNCIÓN: Dibuja las tarjetas en el HTML ---
+        function renderizarCanciones(canciones) {
+            const contenedor = document.getElementById('contenedor-canciones');
+            contenedor.innerHTML = ''; // Limpiamos el contenedor por si acaso
+
+            // Recorremos el Array que nos mandó Supabase
+            canciones.forEach(cancion => {
+                // Creamos el HTML para cada tarjeta insertando los datos (titulo, artista)
+                const tarjetaHTML = `
+                    <div class="bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 transition cursor-pointer group">
+                        <div class="w-full h-32 bg-purple-900/50 rounded-lg mb-3 flex items-center justify-center relative overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-cyan-500/20"></div>
+                            <svg class="w-10 h-10 text-white/50 group-hover:text-white group-hover:scale-110 transition z-10" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"></path></svg>
+                        </div>
+                        <h3 class="font-semibold text-white truncate">${cancion.titulo}</h3>
+                        <p class="text-xs text-white/50 mt-1 truncate">${cancion.artista}</p>
+                    </div>
+                `;
+                // Lo inyectamos en el HTML
+                contenedor.innerHTML += tarjetaHTML;
+            });
+        }
         
-        // Ejecutar la prueba
+        // Ejecutar al cargar la página
         cargarCanciones();
 
-        // --- 3. LÓGICA DE INTERFAZ (BOTÓN PLAY/PAUSE) ---
+        // --- 4. LÓGICA DE INTERFAZ (BOTÓN PLAY/PAUSE) ---
         const playBtn = document.getElementById('play-btn');
         const playIcon = document.getElementById('play-icon');
         const pauseIcon = document.getElementById('pause-icon');
