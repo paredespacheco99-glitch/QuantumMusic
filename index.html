@@ -8,6 +8,8 @@
     <!-- Librerías y Fuentes -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Librería de Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <style>
@@ -44,6 +46,7 @@
     </style>
 </head>
 <body>
+    <!-- Fondos -->
     <div class="cosmic-bg"></div>
     <div class="ambient-glow glow-cyan"></div>
     <div class="ambient-glow glow-purple"></div>
@@ -71,7 +74,7 @@
             </div>
         </header>
 
-        <!-- Cuerpo de la aplicación -->
+        <!-- Cuerpo Principal -->
         <main class="flex flex-1 overflow-hidden">
             
             <!-- Barra Lateral -->
@@ -174,17 +177,17 @@
         // --- 1. CONFIGURACIÓN DE SUPABASE ---
         const supabaseUrl = 'https://hlgdnejdtigydmegiptq.supabase.co'; 
         
-        // IMPORTANTE: REEMPLAZA ESTO CON TU CLAVE COMPLETA REAL
+        // ¡CUIDADO! PEGA TU CLAVE COMPLETA JUSTO AQUÍ, ENTRE LAS COMILLAS SIMPLES:
         const supabaseKey = 'sb_publishable_ESAvdUVWTEHUEnSHxSQUaQ_zGT4ZxQx'; 
         
-        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
         // --- 2. PRUEBA DE CONEXIÓN A BASE DE DATOS ---
         async function cargarCanciones() {
             try {
                 console.log("Conectando a la dimensión Quantum...");
                 
-                const { data: canciones, error } = await supabase
+                const { data: canciones, error } = await supabaseClient
                     .from('Canciones') 
                     .select('*');
 
@@ -199,6 +202,7 @@
             }
         }
         
+        // Ejecutar la prueba
         cargarCanciones();
 
         // --- 3. LÓGICA DE INTERFAZ (BOTÓN PLAY/PAUSE) ---
@@ -206,18 +210,16 @@
         const playIcon = document.getElementById('play-icon');
         const pauseIcon = document.getElementById('pause-icon');
         const glowingDisk = document.getElementById('glowing-disk');
-        let isPlaying = false; // Comienza pausado
+        let isPlaying = false; 
 
         playBtn.addEventListener('click', () => {
-            isPlaying = !isPlaying; // Cambia el estado
+            isPlaying = !isPlaying; 
             
             if (isPlaying) {
-                // Modo Reproduciendo
                 playIcon.classList.add('hidden');
                 pauseIcon.classList.remove('hidden');
                 glowingDisk.style.animationPlayState = 'running';
             } else {
-                // Modo Pausado
                 playIcon.classList.remove('hidden');
                 pauseIcon.classList.add('hidden');
                 glowingDisk.style.animationPlayState = 'paused';
